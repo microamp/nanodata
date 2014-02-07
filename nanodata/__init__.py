@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#-*- coding: utf-8 -*-
 
 import os
 import logging.config
@@ -25,7 +25,7 @@ def from_pyfile(config_file):
 
 
 config_paths = ("/srv/www/nanodata/current/conf/settings.py",
-                "nanodata/settings.py",)
+                "nanodata/settings.py", "settings.py",)
 config = from_pyfile(list(ifilter(lambda path: os.path.exists(path),
                                   config_paths))[0])
 
