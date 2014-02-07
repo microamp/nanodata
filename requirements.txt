@@ -16,6 +16,7 @@ pymongo==2.6.3
 python-dateutil==2.2
 pytz==2013.9
 sexpdata==0.0.3
+simplejson==3.3.2
 six==1.5.2
 Werkzeug==0.9.4
 wsgiref==0.1.2
