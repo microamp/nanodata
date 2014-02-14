@@ -10,7 +10,7 @@ bp_recipes = Blueprint("recipes", __name__)
 
 
 def _import_module(recipe_no):
-    return import_module("nanodata.recipes.recipe{no}".format(no=recipe_no))
+    return import_module("nanodata.recipe.recipe{no}".format(no=recipe_no))
 
 
 @bp_recipes.route("/recipes/<recipe_no>/json")
