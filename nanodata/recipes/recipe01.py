@@ -5,7 +5,9 @@ from functools import partial
 from nanodata import config, COLUMN_MAPPING
 from nanodata.lib import (mongo, queries as q, dataframe as df, fn,)
 
-TITLE = "# of invoices"
+TITLE = "Daily Invoices"
+LABELS = ("Dates", "Invoices")  # labels for x and y axis
+PLOT_TYPE = "line"
 
 
 def cook():
@@ -23,12 +25,17 @@ def cook():
                        partial(df.group_by, keys=("start",)),
                        df.count)
         cooked = f(invoices)
+        print("=" * len(TITLE))
+        print(TITLE)
+        print("=" * len(TITLE))
         print(cooked)
 
         # TODO: write to target
 #        with mongo.MongoHelper(config.DB_TARGET["hosts"],
 #                               config.DB_TARGET["name"]) as db_target:
 #            pass
+
+        return cooked
 
 
 if __name__ == "__main__":
