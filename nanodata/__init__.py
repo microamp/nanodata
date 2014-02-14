@@ -8,6 +8,12 @@ from flask import Flask
 
 __version__ = "0.1"
 
+TYPE_INVOICE = 0
+FORMAT_DT = "%Y-%m-%d"
+COLUMN_MAPPING = {"type": "type",
+                  "amount": "amount",
+                  "start_date": "start"}
+
 
 class DefaultConfig(object):
     DEBUG = True
