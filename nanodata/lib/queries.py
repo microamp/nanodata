@@ -9,6 +9,10 @@ def _dt(dtstr):
     return datetime.strptime(dtstr, FORMAT_DT)
 
 
-def invoices(start):
-    return {"type": TYPE_INVOICE,
-            "start_date": {"$gte": _dt(start)}}
+def invoices(start, end=None):
+    return ({"type": TYPE_INVOICE,
+             "start_date": {"$gte": _dt(start)}}
+            if end is None else
+            {"type": TYPE_INVOICE,
+             "start_date": {"$gte": _dt(start)},
+             "end_date": {"$lte": _dt(end)}})
