@@ -51,3 +51,8 @@ def group_by(df, keys=("start",)):
 def count(dfgb, unstack=False):
     """Apply count to a DataFrameGroupBy object."""
     return dfgb.size().unstack() if unstack else dfgb.size()
+
+
+def sum(dfgb, key="amount", unstack=False):
+    """Apply sum to a DataFrameGroupBy object."""
+    return dfgb[key].sum().unstack() if unstack else dfgb[key].sum()
