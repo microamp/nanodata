@@ -3,7 +3,7 @@
 from functools import partial
 
 from nanodata import config, COLUMN_MAPPING
-from nanodata.lib import (mongo, queries as q, dataframe as df, fn,)
+from nanodata.lib import (db, queries as q, dataframe as df, fn,)
 
 TITLE = "Daily Invoices"
 LABELS = ("Dates", "Invoices")  # labels for x and y axis
@@ -12,7 +12,7 @@ PLOT_TYPE = "line"
 
 def cook():
     # read from source
-    with mongo.MongoHelper(config.DB_SOURCE["hosts"],
+    with db.DatabaseHelper(config.DB_SOURCE["hosts"],
                            config.DB_SOURCE["name"]) as db_source:
         invoices = db_source.read(config.DB_SOURCE["collection"],
                                   query=q.invoices(config.OFFSET))

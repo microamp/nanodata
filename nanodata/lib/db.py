@@ -4,7 +4,7 @@ from pymongo import MongoClient
 from bson import ObjectId
 
 
-class MongoHelper(object):
+class DatabaseHelper(object):
     """A thin wrapper on top of PyMongo."""
     def __init__(self, hosts, name):
         self.hosts = hosts
@@ -45,7 +45,7 @@ class MongoHelper(object):
 
 if __name__ == "__main__":
     dbname, collname = "mydb", "mycoll"
-    with MongoHelper(("localhost",), dbname) as db:
+    with DatabaseHelper(("localhost",), dbname) as db:
         db.drop(collname)
 
         db.write(collname, {"name": "a"})

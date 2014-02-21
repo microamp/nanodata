@@ -7,6 +7,24 @@ import pandas as pd
 from nanodata import COLUMN_MAPPING
 
 
+def from_json(json):
+    """Build a DataFrame object from JSON."""
+    def _from_json():
+        try:
+            return pd.read_json(json)
+        except ValueError:
+            return pd.read_json(json, typ="series")
+        except:
+            raise
+
+    return _from_json() if json is not None else None
+
+
+def to_json(df):
+    """Export a DataFrame object as JSON."""
+    return df.to_json() if df is not None else None
+
+
 def build_df(data, mapping=None):
     """Convert a PyMongo cursor object to a DataFrame object."""
     mapping = mapping or COLUMN_MAPPING
