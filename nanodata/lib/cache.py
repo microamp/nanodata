@@ -21,7 +21,7 @@ class CacheHelper(object):
         finally:
             pass
 
-    def get(self, key, as_dict=False):
+    def get(self, key):
         return self.r.get(key) if key in self.r.keys() else None
 
     def set(self, key, json):
