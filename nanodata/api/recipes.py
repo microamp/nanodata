@@ -41,7 +41,7 @@ def json(recipe_no):
 
     m = import_recipe(recipe_no)
     df_ = _build_df(m, recipe_no)
-    return jsonify(no=recipe_no, name=m.TITLE,
+    return jsonify(no=recipe_no, plotinfo=m.PLOT_INFO,
                    dataframe=_jsonify(df.to_json(df_)))
 
 
