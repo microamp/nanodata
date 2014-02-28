@@ -40,6 +40,13 @@ def dt_to_d(df, keys=("start",)):
     return df
 
 
+def to_monthly(df, key="start"):
+    """Build additional columns, 'year' and 'month', from given key."""
+    df["year"] = df[key].map(lambda dt: dt.year)
+    df["month"] = df[key].map(lambda dt: dt.month)
+    return df
+
+
 def round_nums(df, keys=("amount",)):
     """Round values in given keys to their nearest whole numbers."""
     for k in keys:
