@@ -12,8 +12,10 @@ from nanodata.lib.cache import CacheHelper
 bp_recipes = Blueprint("recipes", __name__)
 logger = getLogger(__name__)
 
+USE_CACHE = True
 
-def _build_df(recipe_module, recipe_no, use_cache=True):
+
+def _build_df(recipe_module, recipe_no, use_cache=USE_CACHE):
     """Read data frame from cache if found, otherwise build it from scratch."""
     with CacheHelper(**config.DB_CACHE) as cache:
         cached = cache.get(recipe_no)
