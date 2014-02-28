@@ -1,5 +1,14 @@
 #-*- coding: utf-8 -*-
 
+"""
+    nanodata.recipe.recipe01
+    ------------------------
+
+    [Recipe #01]
+
+    Daily Invoices
+"""
+
 from functools import partial
 from logging import getLogger
 
@@ -13,7 +22,7 @@ X_LABEL = "Date"
 Y_LABEL = "# of invoices"
 
 logger = getLogger(__name__)
-
+print(__name__)
 
 def cook():
     # read from source

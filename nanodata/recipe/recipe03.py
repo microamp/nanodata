@@ -1,5 +1,14 @@
 #-*- coding: utf-8 -*-
 
+"""
+    nanodata.recipe.recipe03
+    ------------------------
+
+    [Recipe #03]
+
+    Daily Payments
+"""
+
 from functools import partial
 from logging import getLogger
 
