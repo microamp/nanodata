@@ -34,13 +34,23 @@ def build_df(data, mapping=None):
 
 def dt_to_d(df, keys=("start",)):
     """Convert datetime objects in given keys to date objects."""
-    def _dt_to_d(dt):
-        return date(dt.year, dt.month, dt.day)
-
     for k in keys:
-        df[k] = df[k].map(_dt_to_d)
+        df[k] = df[k].map(lambda dt: date(dt.year, dt.month, dt.day))
 
     return df
+
+
+def round_nums(df, keys=("amount",)):
+    """Round values in given keys to their nearest whole numbers."""
+    for k in keys:
+        df[k] = df[k].map(lambda n: int(round(n)))
+
+    return df
+
+
+def rename_columns(df, columns=()):
+    """Rename columns."""
+    return df.rename(columns=dict(columns), inplace=False)
 
 
 def group_by(df, keys=("start",)):

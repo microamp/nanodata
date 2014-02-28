@@ -9,6 +9,7 @@ from flask import Flask
 __version__ = "0.1"
 
 TYPE_INVOICE = 0
+TYPE_PAYMENT = 1
 FORMAT_DT = "%Y-%m-%d"
 COLUMN_MAPPING = {"type": "type",
                   "amount": "amount",

@@ -5,7 +5,7 @@ from StringIO import StringIO
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import seaborn as sns
 
-sns.set_color_palette("deep", desat=.3)
+sns.set_color_palette("deep", desat=.9)
 
 
 def build_plot(df, xlabel="X-Axis", ylabel="Y-Axis", **kwargs):

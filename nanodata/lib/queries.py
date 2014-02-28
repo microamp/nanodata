@@ -2,17 +2,14 @@
 
 from datetime import datetime
 
-from nanodata import TYPE_INVOICE, FORMAT_DT
+from nanodata import TYPE_INVOICE, TYPE_PAYMENT, FORMAT_DT
 
 
 def _dt(dtstr):
     return datetime.strptime(dtstr, FORMAT_DT)
 
 
-def invoices(start, end=None):
-    return ({"type": TYPE_INVOICE,
-             "start_date": {"$gte": _dt(start)}}
-            if end is None else
-            {"type": TYPE_INVOICE,
-             "start_date": {"$gte": _dt(start)},
-             "end_date": {"$lte": _dt(end)}})
+def docs(start, end, types=(TYPE_INVOICE, TYPE_PAYMENT,)):
+    return {"type": {"$in": types},
+            "start_date": {"$gte": _dt(start)},
+            "end_date": {"$lte": _dt(end)}}
