@@ -7,9 +7,10 @@ from nanodata import config, COLUMN_MAPPING
 from nanodata.lib import (db, queries as q, dataframe as df, fn,)
 from nanodata.recipe import yesterday
 
-TITLE = "Daily Invoices (Total Amount)"
-LABELS = ("Dates", "Total Amount ($)")  # labels for x and y axis
-PLOT_TYPE = "line"
+PLOT_INFO = {"title": "Daily Invoices (Total Amount)",
+             "kind": "line"}
+X_LABEL = "Dates"
+Y_LABEL = "Total Amount ($)"
 
 logger = getLogger(__name__)
 

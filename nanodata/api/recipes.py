@@ -12,13 +12,18 @@ from nanodata.lib.cache import CacheHelper
 bp_recipes = Blueprint("recipes", __name__)
 logger = getLogger(__name__)
 
-USE_CACHE = True
+USE_CACHE = False
 
 
 def _build_df(recipe_module, recipe_no, use_cache=USE_CACHE):
     """Read data frame from cache if found, otherwise build it from scratch."""
     with CacheHelper(**config.DB_CACHE) as cache:
-        cached = cache.get(recipe_no)
+        try:
+            cached = cache.get(recipe_no)
+        except Exception as e:
+            logger.error(e.message)
+            cached = None
+
         if cached and use_cache:
             logger.debug("reading recipe #{0} from cache".format(recipe_no))
             df_ = df.from_json(cached)
@@ -44,7 +49,7 @@ def json(recipe_no):
 def plot(recipe_no):
     m = import_recipe(recipe_no)
     df_ = _build_df(m, recipe_no)
-    p = build_plot(df_, title=m.TITLE, labels=m.LABELS, plot_type=m.PLOT_TYPE)
+    p = build_plot(df_, m.X_LABEL, m.Y_LABEL, **m.PLOT_INFO)
 
     response = make_response(p.getvalue())
     response.headers["Content-Type"] = "image/png"
