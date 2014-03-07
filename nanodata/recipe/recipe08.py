@@ -4,7 +4,7 @@
     nanodata.recipe.recipe08
     ------------------------
 
-    [Recipe #07]
+    [Recipe #08]
 
     Monthly Invoices/Payments (Total Amount)
 """

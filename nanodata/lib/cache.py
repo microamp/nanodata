@@ -2,6 +2,8 @@
 
 from redis import StrictRedis
 
+SECONDS_PER_DAY = 60 * 60 * 24
+
 
 class CacheHelper(object):
     """A thin wrapper on top of Redis."""
@@ -25,4 +27,4 @@ class CacheHelper(object):
         return self.r.get(key) if key in self.r.keys() else None
 
     def set(self, key, json):
-        self.r.set(key, json)
+        self.r.set(key, json, ex=SECONDS_PER_DAY)  # cache lasts a day
