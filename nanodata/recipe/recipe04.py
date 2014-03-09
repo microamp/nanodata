@@ -19,7 +19,7 @@ from nanodata.recipe import yesterday
 PLOT_INFO = {"title": "Monthly Invoices (Total Amount)",
              "kind": "bar"}
 X_LABEL = "Date"
-Y_LABEL = "Total amount ($)"
+Y_LABEL = "Total Amount ($)"
 
 logger = getLogger(__name__)
 

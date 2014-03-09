@@ -6,7 +6,7 @@
 
     [Recipe #03]
 
-    Monthly Invoices
+    Monthly Invoices Created
 """
 
 from functools import partial
@@ -16,10 +16,10 @@ from nanodata import config, COLUMN_MAPPING, TYPE_INVOICE
 from nanodata.lib import db, queries as q, dataframe as df, fn
 from nanodata.recipe import yesterday
 
-PLOT_INFO = {"title": "Monthly Invoices",
+PLOT_INFO = {"title": "Monthly Invoices Created",
              "kind": "bar"}
 X_LABEL = "Date"
-Y_LABEL = "# of invoices"
+Y_LABEL = "Number of Invoices"
 
 logger = getLogger(__name__)
 
