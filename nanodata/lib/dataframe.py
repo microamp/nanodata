@@ -41,9 +41,8 @@ def dt_to_d(df, keys=("start",)):
 
 
 def to_monthly(df, key="start"):
-    """Build additional columns, 'year' and 'month', from given key."""
-    df["year"] = df[key].map(lambda dt: dt.year)
-    df["month"] = df[key].map(lambda dt: dt.month)
+    """Make each datetime object monthly by offseting to 1st of the month."""
+    df[key] = df[key].map(lambda dt: date(dt.year, dt.month, 1))
     return df
 
 

@@ -41,7 +41,7 @@ def cook():
         # prepare recipe and start cooking!
         f = fn.compose(partial(df.build_df, mapping=COLUMN_MAPPING),
                        partial(df.to_monthly, key="start"),
-                       partial(df.group_by, keys=("year", "month", "type",)),
+                       partial(df.group_by, keys=("start", "type",)),
                        partial(df.count, unstack=True),
                        partial(df.rename_columns, columns=((0, "Invoice"),
                                                            (1, "Payment"),)))

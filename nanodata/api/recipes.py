@@ -13,10 +13,10 @@ from nanodata.recipe import yesterday
 bp_recipes = Blueprint("recipes", __name__)
 logger = getLogger(__name__)
 
-USE_CACHE = True
+CACHE_ENABLED = getattr(config, "CACHE_ENABLED", True)  # cache on by default
 
 
-def _build_df(recipe_module, recipe_no, use_cache=USE_CACHE):
+def _build_df(recipe_module, recipe_no, cache_enabled=True):
     """Read data frame from cache if found, otherwise build it from scratch."""
     def _cache_key(start, end, num):
         return "{start}-{end}-{num}".format(start=start.replace("-", ""),
@@ -31,7 +31,7 @@ def _build_df(recipe_module, recipe_no, use_cache=USE_CACHE):
             logger.error(e.message)
             cached = None
 
-        if cached and use_cache:
+        if cached and cache_enabled:
             logger.debug("reading recipe #{0} from cache "
                          "(key: '{1}')".format(recipe_no, cache_key))
             df_ = df.from_json(cached)
@@ -49,7 +49,7 @@ def json(recipe_no):
         return v if isinstance(v, dict) else _jsonify(simplejson.loads(v))
 
     m = import_recipe(recipe_no)
-    df_ = _build_df(m, recipe_no)
+    df_ = _build_df(m, recipe_no, cache_enabled=CACHE_ENABLED)
     return jsonify(no=recipe_no, plotinfo=m.PLOT_INFO,
                    dataframe=_jsonify(df.to_json(df_)))
 
@@ -57,7 +57,7 @@ def json(recipe_no):
 @bp_recipes.route("/recipes/<recipe_no>/plot")
 def plot(recipe_no):
     m = import_recipe(recipe_no)
-    df_ = _build_df(m, recipe_no)
+    df_ = _build_df(m, recipe_no, cache_enabled=CACHE_ENABLED)
     p = build_plot(df_, m.X_LABEL, m.Y_LABEL, **m.PLOT_INFO)
 
     response = make_response(p.getvalue())
