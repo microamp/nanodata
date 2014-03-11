@@ -32,7 +32,7 @@ def cook():
                               query=q.docs(config.OFFSET,
                                            end=yesterday(),
                                            types=(TYPE_INVOICE,)))
-        logger.debug("invoices from {start} to {end}: "
+        logger.debug("Invoices from {start} to {end}: "
                      "{count}".format(start=config.OFFSET,
                                       end=yesterday(),
                                       count=docs.count()))

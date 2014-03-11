@@ -32,11 +32,11 @@ def _build_df(recipe_module, recipe_no, cache_enabled=True):
             cached = None
 
         if cached and cache_enabled:
-            logger.debug("reading recipe #{0} from cache "
+            logger.debug("Reading recipe #{0} from cache "
                          "(key: '{1}')".format(recipe_no, cache_key))
             df_ = df.from_json(cached)
         else:
-            logger.debug("building recipe #{0} from scratch "
+            logger.debug("Building recipe #{0} "
                          "(key: '{1}')".format(recipe_no, cache_key))
             df_ = recipe_module.cook()
             cache.set(cache_key, df.to_json(df_))
