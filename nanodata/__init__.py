@@ -13,7 +13,8 @@ TYPE_PAYMENT = 1
 FORMAT_DT = "%Y-%m-%d"
 COLUMN_MAPPING = {"type": "type",
                   "amount": "amount",
-                  "start_date": "start"}
+                  "start_date": "start",
+                  "customer": "customer"}
 
 
 class DefaultConfig(object):

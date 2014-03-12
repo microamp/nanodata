@@ -28,7 +28,7 @@ def to_json(df):
 def build_df(data, mapping=None):
     """Convert a PyMongo cursor object to a DataFrame object."""
     mapping = mapping or COLUMN_MAPPING
-    return pd.DataFrame({mapping[k]: d[k] for k in mapping.keys()}
+    return pd.DataFrame({v: d[k] for k, v in mapping.iteritems()}
                         for d in data)
 
 
@@ -43,6 +43,12 @@ def dt_to_d(df, keys=("start",)):
 def to_monthly(df, key="start"):
     """Make each datetime object monthly by offseting to 1st of the month."""
     df[key] = df[key].map(lambda dt: date(dt.year, dt.month, 1))
+    return df
+
+
+def to_id(df, key="customer"):
+    """Convert each object to its string representation of the ID."""
+    df[key] = df[key].map(lambda obj: unicode(obj.id))
     return df
 
 
@@ -62,6 +68,11 @@ def rename_columns(df, columns=()):
 def group_by(df, keys=("start",)):
     """Group by keys given."""
     return df.groupby(keys)
+
+
+def drop_duplicates(df, columns=()):
+    """Remove duplicate rows."""
+    return df.drop_duplicates(cols=columns)
 
 
 def count(dfgb, unstack=False):
