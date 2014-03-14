@@ -1,12 +1,12 @@
 #-*- coding: utf-8 -*-
 
 """
-    nanodata.recipe.recipe06
+    nanodata.recipe.recipe07
     ------------------------
 
-    [Recipe #06]
+    [Recipe #07]
 
-    Monthly Billing Documents
+    Monthly Billing Documents (Total Amount)
 """
 
 from functools import partial
@@ -18,10 +18,10 @@ from nanodata.lib import db, queries as q, dataframe as df, fn, plot
 from nanodata.recipe import yesterday
 
 PLOT_FUNC = plot.build_plot
-PLOT_INFO = {"title": "Monthly Billing Documents",
+PLOT_INFO = {"title": "Monthly Billing Documents (Total Amount)",
              "kind": "line",
              "xlabel": "Date",
-             "ylabel": "Number of Documents"}
+             "ylabel": "Total Amount ($)"}
 
 logger = getLogger(__name__)
 
@@ -47,7 +47,7 @@ def cook():
         f = fn.compose(partial(df.build_df, mapping=COLUMN_MAPPING),
                        partial(df.to_monthly, key="start"),
                        partial(df.group_by, keys=("start", "type",)),
-                       partial(df.count, unstack=True),
+                       partial(df.sum, unstack=True),
                        partial(df.rename_columns,
                                columns=((TYPE_INVOICE, "Invoice"),
                                         (TYPE_PAYMENT, "Payment"),
