@@ -19,7 +19,7 @@ from nanodata.recipe import yesterday
 PLOT_FUNC = plot.build_plot
 PLOT_INFO = {"title": "Monthly Billed Customers",
              "kind": "bar",
-             "xlabel": "Date",
+             "xlabel": "Month",
              "ylabel": "Number of Billed Customers"}
 
 logger = getLogger(__name__)
