@@ -19,9 +19,10 @@ from nanodata.recipe import yesterday
 
 PLOT_FUNC = plot.build_plot
 PLOT_INFO = {"title": "Monthly Billing Documents (Total Amount)",
-             "kind": "line",
-             "xlabel": "Date",
-             "ylabel": "Total Amount ($)"}
+             "kind": "barh",
+             "stacked": True,
+             "xlabel": "Total Amount ($)",
+             "ylabel": "Month"}
 
 logger = getLogger(__name__)
 
