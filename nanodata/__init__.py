@@ -10,6 +10,9 @@ __version__ = "0.1"
 
 TYPE_INVOICE = 0
 TYPE_PAYMENT = 1
+TYPE_DEBIT = 2
+TYPE_CREDIT = 3
+TYPE_REFUND = 4
 FORMAT_DT = "%Y-%m-%d"
 COLUMN_MAPPING = {"type": "type",
                   "amount": "amount",

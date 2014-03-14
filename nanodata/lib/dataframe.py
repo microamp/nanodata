@@ -70,9 +70,19 @@ def group_by(df, keys=("start",)):
     return df.groupby(keys)
 
 
+def to_series(df, key="amount"):
+    """Convert to pandas.Series."""
+    return pd.Series(df[key])
+
+
 def drop_duplicates(df, columns=()):
     """Remove duplicate rows."""
     return df.drop_duplicates(cols=columns)
+
+
+def fill_na(df, value=0):
+    """Fill nil with ``value``."""
+    return df.fillna(value)
 
 
 def count(dfgb, unstack=False):
