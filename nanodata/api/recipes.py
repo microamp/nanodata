@@ -6,7 +6,6 @@ import simplejson
 
 from nanodata import config
 from nanodata.lib import import_recipe, dataframe as df
-from nanodata.lib.plot import build_plot
 from nanodata.lib.cache import CacheHelper
 from nanodata.recipe import yesterday
 
@@ -58,7 +57,7 @@ def json(recipe_no):
 def plot(recipe_no):
     m = import_recipe(recipe_no)
     df_ = _build_df(m, recipe_no, cache_enabled=CACHE_ENABLED)
-    p = build_plot(df_, m.X_LABEL, m.Y_LABEL, **m.PLOT_INFO)
+    p = m.PLOT_FUNC(df_, **m.PLOT_INFO)
 
     response = make_response(p.getvalue())
     response.headers["Content-Type"] = "image/png"

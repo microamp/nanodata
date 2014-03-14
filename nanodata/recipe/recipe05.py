@@ -13,13 +13,14 @@ from functools import partial
 from logging import getLogger
 
 from nanodata import config, COLUMN_MAPPING, TYPE_INVOICE
-from nanodata.lib import db, queries as q, dataframe as df, fn
+from nanodata.lib import db, queries as q, dataframe as df, fn, plot
 from nanodata.recipe import yesterday
 
+PLOT_FUNC = plot.build_plot
 PLOT_INFO = {"title": "Monthly Billed Customers",
-             "kind": "bar"}
-X_LABEL = "Date"
-Y_LABEL = "Number of Billed Customers"
+             "kind": "bar",
+             "xlabel": "Date",
+             "ylabel": "Number of Billed Customers"}
 
 logger = getLogger(__name__)
 
