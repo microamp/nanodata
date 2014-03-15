@@ -7,7 +7,7 @@ import simplejson
 from nanodata import config
 from nanodata.lib import import_recipe, dataframe as df
 from nanodata.lib.cache import CacheHelper
-from nanodata.recipe import yesterday
+from nanodata.recipe import offset, yesterday
 
 bp_recipes = Blueprint("recipes", __name__)
 logger = getLogger(__name__)
@@ -23,7 +23,9 @@ def _build_df(recipe_module, recipe_no, cache_enabled=True):
                                             num=num)
 
     with CacheHelper(**config.DB_CACHE) as cache:
-        cache_key = _cache_key(config.OFFSET, yesterday(), recipe_no)
+        cache_key = _cache_key(offset(config.PREV_MONTHS),
+                               yesterday(),
+                               recipe_no)
         try:
             cached = cache.get(cache_key)
         except Exception as e:
