@@ -6,25 +6,23 @@
 
     [Recipe #07]
 
-    Monthly Billing Documents (Total Amount)
+    Monthly Invoices/Payments (Total Amount)
 """
 
 from functools import partial
 from logging import getLogger
 
-from nanodata import (config, COLUMN_MAPPING, TYPE_INVOICE, TYPE_PAYMENT,
-                      TYPE_DEBIT, TYPE_CREDIT, TYPE_REFUND,)
+from nanodata import config, COLUMN_MAPPING, TYPE_INVOICE, TYPE_PAYMENT
 from nanodata.lib import db, queries as q, dataframe as df, fn, plot
 from nanodata.recipe import offset, yesterday
 
 logger = getLogger(__name__)
 
 PLOT_FUNC = plot.build_plot
-PLOT_INFO = {"title": "Monthly Billing Documents (Total Amount)",
-             "kind": "barh",
-             "stacked": True,
-             "xlabel": "Total Amount ($)",
-             "ylabel": "Month"}
+PLOT_INFO = {"title": "Monthly Invoices/Payments (Total Amount)",
+             "kind": "bar",
+             "xlabel": "Month",
+             "ylabel": "Total Amount ($)"}
 
 
 def cook():
@@ -36,10 +34,7 @@ def cook():
                               query=q.docs(start,
                                            end=end,
                                            types=(TYPE_INVOICE,
-                                                  TYPE_PAYMENT,
-                                                  TYPE_DEBIT,
-                                                  TYPE_CREDIT,
-                                                  TYPE_REFUND,)))
+                                                  TYPE_PAYMENT,)))
         logger.debug("Billing documents from {start} to {end}: "
                      "{count}".format(start=start,
                                       end=end,
@@ -52,10 +47,7 @@ def cook():
                        partial(df.sum, unstack=True),
                        partial(df.rename_columns,
                                columns=((TYPE_INVOICE, "Invoice"),
-                                        (TYPE_PAYMENT, "Payment"),
-                                        (TYPE_DEBIT, "Debit"),
-                                        (TYPE_CREDIT, "Credit"),
-                                        (TYPE_REFUND, "Refund"),)),
+                                        (TYPE_PAYMENT, "Payment"),)),
                        df.fill_na)
         return f(docs)
 
