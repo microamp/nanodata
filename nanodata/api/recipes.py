@@ -26,10 +26,12 @@ def _build_df(recipe_module, recipe_no, cache_enabled=True):
         cache_key = _cache_key(offset(config.PREV_MONTHS),
                                yesterday(),
                                recipe_no)
+        # read from cache
         try:
             cached = cache.get(cache_key)
         except Exception as e:
-            logger.error(e.message)
+            logger.error("Error while reading from cache: "
+                         "{0}".format(e.message))
             cached = None
 
         if cached and cache_enabled:
@@ -40,8 +42,15 @@ def _build_df(recipe_module, recipe_no, cache_enabled=True):
             logger.debug("Building recipe #{0} "
                          "(key: '{1}')".format(recipe_no, cache_key))
             df_ = recipe_module.cook()
+
+        # update cache
+        try:
             cache.set(cache_key, df.to_json(df_))
-        return df_
+        except Exception as e:
+            logger.error("Error while updating cache: "
+                         "{0}".format(e.message))
+        finally:
+            return df_
 
 
 @bp_recipes.route("/recipes/<recipe_no>/json")
