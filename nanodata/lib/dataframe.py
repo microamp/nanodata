@@ -4,7 +4,7 @@ from datetime import date
 
 import pandas as pd
 
-from nanodata import COLUMN_MAPPING
+from nanodata import COLUMN_MAPPING_BILLING
 
 
 def from_json(json):
@@ -27,7 +27,7 @@ def to_json(df):
 
 def build_df(data, mapping=None):
     """Convert a PyMongo cursor object to a DataFrame object."""
-    mapping = mapping or COLUMN_MAPPING
+    mapping = mapping or COLUMN_MAPPING_BILLING
     return pd.DataFrame({v: d[k] for k, v in mapping.iteritems()}
                         for d in data)
 

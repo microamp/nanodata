@@ -11,5 +11,10 @@ def _dt(dtstr):
 
 def docs(start, end, types=(TYPE_INVOICE, TYPE_PAYMENT,)):
     return {"type": {"$in": types},
-            "start_date": {"$gte": _dt(start)},
-            "end_date": {"$lte": _dt(end)}}
+            "start_date": {"$gte": _dt(start),
+                           "$lte": _dt(end)}}
+
+
+def customers(start, end):
+    return {"start_date": {"$gte": _dt(start),
+                           "$lte": _dt(end)}}

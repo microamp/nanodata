@@ -8,16 +8,22 @@ from flask import Flask
 
 __version__ = "0.1"
 
+COLLECTION_BILLING = "billing"
+COLLECTION_CUSTOMER = "customer"
+
 TYPE_INVOICE = 0
 TYPE_PAYMENT = 1
 TYPE_DEBIT = 2
 TYPE_CREDIT = 3
 TYPE_REFUND = 4
+
 FORMAT_DT = "%Y-%m-%d"
-COLUMN_MAPPING = {"type": "type",
-                  "amount": "amount",
-                  "start_date": "start",
-                  "customer": "customer"}
+
+COLUMN_MAPPING_BILLING = {"type": "type",
+                          "amount": "amount",
+                          "start_date": "start",
+                          "customer": "customer"}
+COLUMN_MAPPING_CUSTOMER = {"start_date": "start"}
 
 
 class DefaultConfig(object):
@@ -36,7 +42,8 @@ def from_pyfile(config_file):
 
 
 config_paths = ("/srv/www/nanodata/current/conf/settings.py",
-                "nanodata/settings.py", "settings.py",)
+                "nanodata/settings.py",
+                "settings.py",)
 config = from_pyfile(list(ifilter(lambda path: os.path.exists(path),
                                   config_paths))[0])
 
