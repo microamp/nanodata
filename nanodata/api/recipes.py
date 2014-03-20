@@ -7,7 +7,7 @@ import simplejson
 from nanodata import config
 from nanodata.lib import import_recipe, dataframe as df
 from nanodata.lib.cache import CacheHelper
-from nanodata.recipe import offset, yesterday
+from nanodata.recipe import offset, yesterday, __all__ as all_recipes
 
 bp_recipes = Blueprint("recipes", __name__)
 logger = getLogger(__name__)
@@ -74,3 +74,15 @@ def plot(recipe_no):
     response.headers["Content-Type"] = "image/png"
 
     return response
+
+
+@bp_recipes.route("/recipes")
+def list_all():
+    def _build():
+        return [{"no": recipe_no,
+                 "title": import_recipe(recipe_no).PLOT_INFO["title"]}
+                for recipe_no in sorted(map(lambda r: r.lstrip("recipe"),
+                                            all_recipes),
+                                        key=lambda r: int(r))]
+
+    return jsonify(recipes=_build())
