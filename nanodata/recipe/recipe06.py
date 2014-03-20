@@ -49,7 +49,8 @@ def cook():
                        partial(df.rename_columns,
                                columns=((TYPE_INVOICE, "Invoice"),
                                         (TYPE_PAYMENT, "Payment"),)),
-                       df.fill_na)
+                       df.fill_na,
+                       df.rename_index_monthly)
         return f(docs)
 
 

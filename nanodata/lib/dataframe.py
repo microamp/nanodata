@@ -93,3 +93,9 @@ def count(dfgb, unstack=False):
 def sum(dfgb, key="amount", unstack=False):
     """Apply sum to a DataFrameGroupBy object."""
     return dfgb[key].sum().unstack() if unstack else dfgb[key].sum()
+
+
+def rename_index_monthly(df, format="%b %Y"):
+    """Rename date index to monthly string."""
+    df.rename(index=lambda idx: idx.strftime(format), inplace=True)
+    return df
