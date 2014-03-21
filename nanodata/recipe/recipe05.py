@@ -6,7 +6,7 @@
 
     [Recipe #05]
 
-    Monthly Billed Customers
+    Monthly Billed Customers (#)
 """
 
 from functools import partial
@@ -20,10 +20,10 @@ from nanodata.recipe import offset, yesterday
 logger = getLogger(__name__)
 
 PLOT_FUNC = plot.build_plot
-PLOT_INFO = {"title": "Monthly Billed Customers",
+PLOT_INFO = {"title": "Monthly Billed Customers (#)",
              "kind": "bar",
              "xlabel": "Month",
-             "ylabel": "Number of Billed Customers"}
+             "ylabel": "Number of Customers"}
 
 
 def cook():

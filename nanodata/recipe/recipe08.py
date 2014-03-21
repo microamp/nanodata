@@ -6,7 +6,7 @@
 
     [Recipe #08]
 
-    Monthly Billing Documents
+    Monthly Billing Documents (#)
 """
 
 from functools import partial
@@ -20,7 +20,7 @@ from nanodata.recipe import offset, yesterday
 logger = getLogger(__name__)
 
 PLOT_FUNC = plot.build_subplots
-PLOT_INFO = {"title": "Monthly Billing Documents",
+PLOT_INFO = {"title": "Monthly Billing Documents (#)",
              "kind": "line",
              "xlabel": "Month",
              "rows": 2,

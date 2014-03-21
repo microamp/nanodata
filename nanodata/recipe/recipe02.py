@@ -6,7 +6,7 @@
 
     [Recipe #02]
 
-    Daily Invoices (Total Amount)
+    Daily Invoices ($)
 """
 
 from functools import partial
@@ -20,10 +20,10 @@ from nanodata.recipe import offset, yesterday
 logger = getLogger(__name__)
 
 PLOT_FUNC = plot.build_plot
-PLOT_INFO = {"title": "Daily Invoices (Total Amount)",
+PLOT_INFO = {"title": "Daily Invoices ($)",
              "kind": "line",
              "xlabel": "Date",
-             "ylabel": "Total Amount ($)"}
+             "ylabel": "Amount ($)"}
 
 
 def cook():
