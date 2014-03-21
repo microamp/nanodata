@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 
-from pymongo import MongoClient
+from pymongo import MongoClient, ReadPreference
 from bson import ObjectId
 
 
@@ -11,7 +11,10 @@ class DatabaseHelper(object):
         self.name = name
 
     def __enter__(self):
-        self.client = MongoClient(host=self.hosts)
+        self.client = MongoClient(
+            host=self.hosts,
+            read_preference=ReadPreference.PRIMARY_PREFERRED
+        )
         self.db = self.client[self.name]
         return self
 
