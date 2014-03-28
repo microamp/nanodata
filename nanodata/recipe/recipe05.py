@@ -47,8 +47,7 @@ def cook():
                        partial(df.drop_duplicates,
                                columns=("start", "customer",)),
                        partial(df.group_by, keys=("start",)),
-                       df.count,
-                       df.rename_index_monthly)
+                       df.count)
         return f(docs)
 
 

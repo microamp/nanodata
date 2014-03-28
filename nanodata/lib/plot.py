@@ -4,14 +4,16 @@ from StringIO import StringIO
 
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib import pyplot as plt
+import matplotlib.dates as mdates
 import seaborn as sns
 
 sns.set_color_palette("deep", desat=.9)
 
+FMT_MONTHLY = mdates.DateFormatter("%Y")
+
 
 def _output_png(figure):
     try:
-        figure.autofmt_xdate()
         figure.tight_layout()
 
         canvas = FigureCanvas(figure)

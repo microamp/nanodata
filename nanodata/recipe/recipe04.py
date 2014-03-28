@@ -44,8 +44,7 @@ def cook():
         f = fn.compose(partial(df.build_df, mapping=COLUMN_MAPPING_BILLING),
                        partial(df.to_monthly, key="start"),
                        partial(df.group_by, keys=("start",)),
-                       partial(df.sum, key="amount"),
-                       df.rename_index_monthly)
+                       partial(df.sum, key="amount"))
         return f(docs)
 
 

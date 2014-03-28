@@ -7,28 +7,26 @@ import simplejson
 from nanodata import config
 from nanodata.lib import import_recipe, dataframe as df
 from nanodata.lib.cache import CacheHelper
-from nanodata.recipe import (offset, last_day_prev_month, today,
+from nanodata.recipe import (offset, last_day_prev_month,
                              __all__ as all_recipes,)
 
 bp_recipes = Blueprint("recipes", __name__)
 logger = getLogger(__name__)
 
-CACHE_ENABLED = getattr(config, "CACHE_ENABLED", True)  # cache on by default
-
 
 def _build_df(recipe_module, recipe_no, cache_enabled=True):
     """Read data frame from cache if found, otherwise build it from scratch."""
     def _cache_key(start, end, num, day=None):
-        return ("{start}-{end}-"
-                "{num}-{day}".format(start=start.replace("-", ""),
-                                     end=end.replace("-", ""),
-                                     num=num,
-                                     day=(day or today()).replace("-", "")))
+        return "{num}-{start}-{end}".format(num=num,
+                                            start=start.replace("-", ""),
+                                            end=end.replace("-", ""))
 
     with CacheHelper(**config.DB_CACHE) as cache:
         cache_key = _cache_key(offset(config.PREV_MONTHS),
                                last_day_prev_month(),
                                recipe_no)
+        logger.debug("Cache keys: {0}".format(", ".join(sorted(cache.keys()))))
+
         # read from cache
         try:
             cached = cache.get(cache_key)
@@ -37,23 +35,26 @@ def _build_df(recipe_module, recipe_no, cache_enabled=True):
                          "{0}".format(e.message))
             cached = None
 
-        if cached and cache_enabled:
+        if cached and cache_enabled:  # found in cache
             logger.debug("Reading recipe #{0} from cache "
                          "(key: '{1}')".format(recipe_no, cache_key))
             df_ = df.from_json(cached)
-        else:
+        else:  # missing in cache
             logger.debug("Building recipe #{0} "
                          "(key: '{1}')".format(recipe_no, cache_key))
             df_ = recipe_module.cook()
+            try:
+                # update cache
+                cache.set(cache_key, df.to_json(df_))
+                logger.debug("Cache added: {0}".format(cache_key))
+            except Exception as e:
+                logger.error("Error while updating cache: "
+                             "{0}".format(e.message))
 
-        # update cache
-        try:
-            cache.set(cache_key, df.to_json(df_))
-        except Exception as e:
-            logger.error("Error while updating cache: "
-                         "{0}".format(e.message))
-        finally:
-            return df_
+        logger.debug("Displaying the first 10 rows:")
+        logger.debug(df_.head(10))
+
+        return df.rename_index(df_)
 
 
 @bp_recipes.route("/recipes/<recipe_no>/json")
@@ -62,7 +63,8 @@ def json(recipe_no):
         return v if isinstance(v, dict) else _jsonify(simplejson.loads(v))
 
     m = import_recipe(recipe_no)
-    df_ = _build_df(m, recipe_no, cache_enabled=CACHE_ENABLED)
+    df_ = _build_df(m, recipe_no,
+                    cache_enabled=getattr(config, "CACHE_ENABLED", True))
     return jsonify(no=recipe_no, plotinfo=m.PLOT_INFO,
                    dataframe=_jsonify(df.to_json(df_)))
 
@@ -70,7 +72,8 @@ def json(recipe_no):
 @bp_recipes.route("/recipes/<recipe_no>/plot")
 def plot(recipe_no):
     m = import_recipe(recipe_no)
-    df_ = _build_df(m, recipe_no, cache_enabled=CACHE_ENABLED)
+    df_ = _build_df(m, recipe_no,
+                    cache_enabled=getattr(config, "CACHE_ENABLED", True))
     p = m.PLOT_FUNC(df_, **m.PLOT_INFO)
 
     response = make_response(p.getvalue())

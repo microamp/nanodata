@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 
-from datetime import date
+from datetime import date, datetime
 
 import pandas as pd
 
@@ -65,6 +65,17 @@ def rename_columns(df, columns=()):
     return df.rename(columns=dict(columns), inplace=False)
 
 
+def rename_index(df, fn=None):
+    """Rename time indices to %b %Y."""
+    monthly = lambda dt: datetime.strftime(
+        datetime.strptime(dt if isinstance(dt, basestring) else
+                          date(dt.year, dt.month, dt.day).isoformat(),
+                          "%Y-%m-%d"),
+        "%b %Y"
+    )
+    return df.rename(index=fn or monthly)
+
+
 def group_by(df, keys=("start",)):
     """Group by keys given."""
     return df.groupby(keys)
@@ -93,9 +104,3 @@ def count(dfgb, unstack=False):
 def sum(dfgb, key="amount", unstack=False):
     """Apply sum to a DataFrameGroupBy object."""
     return dfgb[key].sum().unstack() if unstack else dfgb[key].sum()
-
-
-def rename_index_monthly(df, format="%b %Y"):
-    """Rename date index to monthly string."""
-    df.rename(index=lambda idx: idx.strftime(format), inplace=True)
-    return df
