@@ -21,10 +21,12 @@ logger = getLogger(__name__)
 
 PLOT_FUNC = plot.build_subplots
 PLOT_INFO = {"title": "Monthly Billing Documents ($)",
+             "nrows": 2,
+             "ncols": 2,
+             "sharex": True,
              "kind": "line",
              "xlabel": "Month",
-             "rows": 2,
-             "cols": 2,
+             "rot": 90,
              "coordinates": {"Invoice": (0, 0),
                              "Payment": (0, 1),
                              "Debit": (1, 0),

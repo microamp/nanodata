@@ -4,12 +4,9 @@ from StringIO import StringIO
 
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib import pyplot as plt
-import matplotlib.dates as mdates
 import seaborn as sns
 
 sns.set_color_palette("deep", desat=.9)
-
-FMT_MONTHLY = mdates.DateFormatter("%Y")
 
 
 def _output_png(figure):
@@ -35,12 +32,12 @@ def build_plot(df, xlabel="X-Axis", ylabel="Y-Axis", **kwargs):
     return _output_png(figure)
 
 
-def build_subplots(df, **kwargs):
-    figure, axes = plt.subplots(nrows=kwargs["rows"], ncols=kwargs["cols"])
-    plt.suptitle(kwargs["title"])
+def build_subplots(df, title="title", nrows=1, ncols=1, sharex=True, **kwargs):
+    figure, axes = plt.subplots(nrows=nrows, ncols=ncols, sharex=sharex)
+    plt.suptitle(title)
 
     for column, (x, y) in kwargs["coordinates"].iteritems():
-        df[column].plot(ax=axes[x, y], kind=kwargs["kind"])
+        df[column].plot(ax=axes[x, y], kind=kwargs["kind"], rot=kwargs["rot"])
         axes[x, y].set_title(column)
         axes[x, y].set_xlabel(kwargs["xlabel"])
 
