@@ -14,7 +14,7 @@ from logging import getLogger
 
 from nanodata import config, COLLECTION_CUSTOMER, COLUMN_MAPPING_CUSTOMER
 from nanodata.lib import db, queries as q, dataframe as df, fn, plot
-from nanodata.recipe import offset, last_day_prev_month
+from nanodata.lib.dt import offset, first_day_current_month
 
 logger = getLogger(__name__)
 
@@ -29,7 +29,7 @@ def cook():
     # read from source
     with db.DatabaseHelper(config.DB_SOURCE["hosts"],
                            config.DB_SOURCE["name"]) as db_source:
-        start, end = offset(config.PREV_MONTHS), last_day_prev_month()
+        start, end = offset(config.PREV_MONTHS), first_day_current_month()
         customers = db_source.read(COLLECTION_CUSTOMER,
                                    query=q.customers(start, end))
         logger.debug("Customers from {start} to {end}: "
