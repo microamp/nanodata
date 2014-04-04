@@ -24,6 +24,7 @@ PLOT_INFO = {"title": "Daily Invoices ($)",
              "kind": "line",
              "xlabel": "Date",
              "ylabel": "Amount ($)"}
+MONTHLY_INDEX = False
 
 
 def date_range():

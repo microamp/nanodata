@@ -65,7 +65,7 @@ def rename_columns(df, columns=()):
     return df.rename(columns=dict(columns), inplace=False)
 
 
-def rename_index(df, fn=None):
+def monthly_index(df, fn=None):
     """Rename time indices to %b %Y."""
     monthly = lambda dt: datetime.strftime(
         datetime.strptime(dt if isinstance(dt, basestring) else

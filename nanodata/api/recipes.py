@@ -15,14 +15,15 @@ logger = getLogger(__name__)
 
 def _build_df(recipe_module, recipe_no, cache_enabled=True):
     """Read data frame from cache if found, otherwise build it from scratch."""
-    def _cache_key(recipe_no):
-        start, end = import_recipe(recipe_no).date_range()
+    def _cache_key(recipe_no, date_range):
+        start, end = date_range
         return "{recipe_no}-{start}-{end}".format(recipe_no=recipe_no,
                                                   start=start.replace("-", ""),
                                                   end=end.replace("-", ""))
 
+    m = import_recipe(recipe_no)
     with CacheHelper(**config.DB_CACHE) as cache:
-        cache_key = _cache_key(recipe_no)
+        cache_key = _cache_key(recipe_no, m.date_range())
         logger.debug("Cache key: {0}".format(cache_key))
 
         # read from cache
@@ -52,7 +53,9 @@ def _build_df(recipe_module, recipe_no, cache_enabled=True):
         logger.debug("Displaying the first 10 rows:")
         logger.debug(df_.head(10))
 
-        return df.rename_index(df_)
+        return (df.monthly_index(df_)
+                if getattr(m, "MONTHLY_INDEX", True) else
+                df_)
 
 
 @bp_recipes.route("/recipes/<recipe_no>/json")
