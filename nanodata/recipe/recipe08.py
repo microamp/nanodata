@@ -33,11 +33,15 @@ PLOT_INFO = {"title": "Monthly Billing Documents (#)",
                              "Credit": (1, 1)}}
 
 
+def date_range():
+    return offset(config.PREV_MONTHS), first_day_current_month()
+
+
 def cook():
     # read from source
     with db.DatabaseHelper(config.DB_SOURCE["hosts"],
                            config.DB_SOURCE["name"]) as db_source:
-        start, end = offset(config.PREV_MONTHS), first_day_current_month()
+        start, end = date_range()
         docs = db_source.read(COLLECTION_BILLING,
                               query=q.docs(start,
                                            end=end,
@@ -45,7 +49,7 @@ def cook():
                                                   TYPE_PAYMENT,
                                                   TYPE_DEBIT,
                                                   TYPE_CREDIT,)))
-        logger.debug("Billing documents from {start} to {end}: "
+        logger.debug("Documents from {start} to {end} (exclusive): "
                      "{count}".format(start=start,
                                       end=end,
                                       count=docs.count()))

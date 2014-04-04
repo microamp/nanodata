@@ -15,7 +15,7 @@ from logging import getLogger
 from nanodata import (config, COLLECTION_BILLING, COLUMN_MAPPING_BILLING,
                       TYPE_INVOICE,)
 from nanodata.lib import db, queries as q, dataframe as df, fn, plot
-from nanodata.lib.dt import offset, first_day_current_month
+from nanodata.lib.dt import offset, today
 
 logger = getLogger(__name__)
 
@@ -26,16 +26,20 @@ PLOT_INFO = {"title": "Daily Invoices ($)",
              "ylabel": "Amount ($)"}
 
 
+def date_range():
+    return offset(config.PREV_MONTHS), today()
+
+
 def cook():
     # read from source
     with db.DatabaseHelper(config.DB_SOURCE["hosts"],
                            config.DB_SOURCE["name"]) as db_source:
-        start, end = offset(config.PREV_MONTHS), first_day_current_month()
+        start, end = date_range()
         docs = db_source.read(COLLECTION_BILLING,
                               query=q.docs(start,
                                            end=end,
                                            types=(TYPE_INVOICE,)))
-        logger.debug("Invoices from {start} to {end}: "
+        logger.debug("Documents from {start} to {end} (exclusive): "
                      "{count}".format(start=start,
                                       end=end,
                                       count=docs.count()))

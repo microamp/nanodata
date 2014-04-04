@@ -25,24 +25,28 @@ PLOT_INFO = {"title": "New Customers (#)",
              "ylabel": "Number of Customers"}
 
 
+def date_range():
+    return offset(config.PREV_MONTHS), first_day_current_month()
+
+
 def cook():
     # read from source
     with db.DatabaseHelper(config.DB_SOURCE["hosts"],
                            config.DB_SOURCE["name"]) as db_source:
-        start, end = offset(config.PREV_MONTHS), first_day_current_month()
-        customers = db_source.read(COLLECTION_CUSTOMER,
-                                   query=q.customers(start, end))
-        logger.debug("Customers from {start} to {end}: "
+        start, end = date_range()
+        docs = db_source.read(COLLECTION_CUSTOMER,
+                              query=q.customers(start, end))
+        logger.debug("Documents from {start} to {end} (exclusive): "
                      "{count}".format(start=start,
                                       end=end,
-                                      count=customers.count()))
+                                      count=docs.count()))
 
         # prepare recipe and start cooking!
         f = fn.compose(partial(df.build_df, mapping=COLUMN_MAPPING_CUSTOMER),
                        partial(df.to_monthly, key="start"),
                        partial(df.group_by, keys=("start",)),
                        df.count)
-        return f(customers)
+        return f(docs)
 
 
 if __name__ == "__main__":

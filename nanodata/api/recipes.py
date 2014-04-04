@@ -7,7 +7,6 @@ import simplejson
 from nanodata import config
 from nanodata.lib import import_recipe, dataframe as df
 from nanodata.lib.cache import CacheHelper
-from nanodata.lib.dt import offset, first_day_current_month
 from nanodata.recipe import __all__ as all_recipes
 
 bp_recipes = Blueprint("recipes", __name__)
@@ -16,16 +15,15 @@ logger = getLogger(__name__)
 
 def _build_df(recipe_module, recipe_no, cache_enabled=True):
     """Read data frame from cache if found, otherwise build it from scratch."""
-    def _cache_key(start, end, num, day=None):
-        return "{num}-{start}-{end}".format(num=num,
-                                            start=start.replace("-", ""),
-                                            end=end.replace("-", ""))
+    def _cache_key(recipe_no):
+        start, end = import_recipe(recipe_no).date_range()
+        return "{recipe_no}-{start}-{end}".format(recipe_no=recipe_no,
+                                                  start=start.replace("-", ""),
+                                                  end=end.replace("-", ""))
 
     with CacheHelper(**config.DB_CACHE) as cache:
-        cache_key = _cache_key(offset(config.PREV_MONTHS),
-                               first_day_current_month(),
-                               recipe_no)
-        logger.debug("Cache keys: {0}".format(", ".join(sorted(cache.keys()))))
+        cache_key = _cache_key(recipe_no)
+        logger.debug("Cache key: {0}".format(cache_key))
 
         # read from cache
         try:
