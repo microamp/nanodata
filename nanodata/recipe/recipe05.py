@@ -6,21 +6,21 @@
 
     [Recipe #05]
 
-    Monthly Billed Customers (#)
+    Monthly Paying Customers (#)
 """
 
 from functools import partial
 from logging import getLogger
 
 from nanodata import (config, COLLECTION_BILLING, COLUMN_MAPPING_BILLING,
-                      TYPE_INVOICE,)
+                      TYPE_PAYMENT,)
 from nanodata.lib import db, queries as q, dataframe as df, fn, plot
 from nanodata.lib.dt import offset, first_day_current_month
 
 logger = getLogger(__name__)
 
 PLOT_FUNC = plot.build_plot
-PLOT_INFO = {"title": "Monthly Billed Customers (#)",
+PLOT_INFO = {"title": "Monthly Paying Customers (#)",
              "kind": "bar",
              "xlabel": "Month",
              "ylabel": "Number of Customers"}
@@ -38,7 +38,7 @@ def cook():
         docs = db_source.read(COLLECTION_BILLING,
                               query=q.docs(start,
                                            end=end,
-                                           types=(TYPE_INVOICE,)))
+                                           types=(TYPE_PAYMENT,)))
         logger.debug("Documents from {start} to {end} (exclusive): "
                      "{count}".format(start=start,
                                       end=end,

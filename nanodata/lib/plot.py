@@ -6,7 +6,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib import pyplot as plt
 import seaborn as sns
 
-sns.set_color_palette("deep", desat=.9)
+sns.set_palette("deep", desat=.9)
 
 
 def _output_png(figure):

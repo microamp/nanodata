@@ -1,29 +1,36 @@
 #-*- coding: utf-8 -*-
 
 """
-    nanodata.recipe.recipe06
+    nanodata.recipe.recipe08
     ------------------------
 
-    [Recipe #06]
+    [Recipe #08]
 
-    Monthly Invoices/Payments (#)
+    Monthly Billing Documents (#)
 """
 
 from functools import partial
 from logging import getLogger
 
 from nanodata import (config, COLLECTION_BILLING, COLUMN_MAPPING_BILLING,
-                      TYPE_INVOICE, TYPE_PAYMENT,)
+                      TYPE_PAYMENT, TYPE_DEBIT, TYPE_CREDIT, TYPE_REFUND,)
 from nanodata.lib import db, queries as q, dataframe as df, fn, plot
 from nanodata.lib.dt import offset, first_day_current_month
 
 logger = getLogger(__name__)
 
-PLOT_FUNC = plot.build_plot
-PLOT_INFO = {"title": "Monthly Invoices/Payments (#)",
+PLOT_FUNC = plot.build_subplots
+PLOT_INFO = {"title": "Monthly Billing Documents (#)",
+             "nrows": 2,
+             "ncols": 2,
+             "sharex": True,
              "kind": "bar",
              "xlabel": "Month",
-             "ylabel": "Number of Documents"}
+             "rot": 90,
+             "coordinates": {"Payment": (0, 0),
+                             "Debit": (0, 1),
+                             "Credit": (1, 0),
+                             "Refund": (1, 1)}}
 
 
 def date_range():
@@ -38,8 +45,10 @@ def cook():
         docs = db_source.read(COLLECTION_BILLING,
                               query=q.docs(start,
                                            end=end,
-                                           types=(TYPE_INVOICE,
-                                                  TYPE_PAYMENT,)))
+                                           types=(TYPE_PAYMENT,
+                                                  TYPE_DEBIT,
+                                                  TYPE_CREDIT,
+                                                  TYPE_REFUND,)))
         logger.debug("Documents from {start} to {end} (exclusive): "
                      "{count}".format(start=start,
                                       end=end,
@@ -51,8 +60,10 @@ def cook():
                        partial(df.group_by, keys=("start", "type",)),
                        partial(df.count, unstack=True),
                        partial(df.rename_columns,
-                               columns=((TYPE_INVOICE, "Invoice"),
-                                        (TYPE_PAYMENT, "Payment"),)),
+                               columns=((TYPE_PAYMENT, "Payment"),
+                                        (TYPE_DEBIT, "Debit"),
+                                        (TYPE_CREDIT, "Credit"),
+                                        (TYPE_REFUND, "Refund"),)),
                        df.fill_na)
         return f(docs)
 

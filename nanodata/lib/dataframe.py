@@ -48,6 +48,7 @@ def to_monthly(df, key="start"):
 
 def to_id(df, key="customer"):
     """Convert each object to its string representation of the ID."""
+    df = df[df[key].notnull()]  # filter out null first
     df[key] = df[key].map(lambda obj: unicode(obj.id))
     return df
 
