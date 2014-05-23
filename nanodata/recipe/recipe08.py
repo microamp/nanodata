@@ -1,10 +1,10 @@
 #-*- coding: utf-8 -*-
 
 """
-    nanodata.recipe.recipe10
+    nanodata.recipe.recipe08
     ------------------------
 
-    [Recipe #10]
+    [Recipe #08]
 
     New Customers (#)
 """

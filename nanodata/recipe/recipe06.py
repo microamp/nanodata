@@ -1,10 +1,10 @@
 #-*- coding: utf-8 -*-
 
 """
-    nanodata.recipe.recipe08
+    nanodata.recipe.recipe06
     ------------------------
 
-    [Recipe #08]
+    [Recipe #06]
 
     Monthly Billing Documents (#)
 """

@@ -9,7 +9,7 @@ from nanodata.lib import import_recipe, dataframe as df
 from nanodata.lib.cache import CacheHelper
 from nanodata.recipe import __all__ as all_recipes
 
-bp_recipes = Blueprint("recipes", __name__)
+bp_recipe = Blueprint("recipe", __name__)
 logger = getLogger(__name__)
 
 
@@ -58,7 +58,7 @@ def _build_df(recipe_module, recipe_no, cache_enabled=True):
                 df_)
 
 
-@bp_recipes.route("/recipes/<recipe_no>/json")
+@bp_recipe.route("/recipe/<recipe_no>/json")
 def json(recipe_no):
     def _jsonify(v):
         return v if isinstance(v, dict) else _jsonify(simplejson.loads(v))
@@ -70,7 +70,7 @@ def json(recipe_no):
                    dataframe=_jsonify(df.to_json(df_)))
 
 
-@bp_recipes.route("/recipes/<recipe_no>/plot")
+@bp_recipe.route("/recipe/<recipe_no>/plot")
 def plot(recipe_no):
     m = import_recipe(recipe_no)
     df_ = _build_df(m, recipe_no,
@@ -83,7 +83,7 @@ def plot(recipe_no):
     return response
 
 
-@bp_recipes.route("/recipes")
+@bp_recipe.route("/recipe")
 def list_all():
     def _build():
         return [{"no": recipe_no,
