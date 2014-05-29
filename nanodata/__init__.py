@@ -6,7 +6,7 @@ from itertools import ifilter
 
 from flask import Flask
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 COLLECTION_BILLING = "billing"
 COLLECTION_CUSTOMER = "customer"
