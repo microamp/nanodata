@@ -76,7 +76,7 @@ def create_app():
         logging.config.fileConfig(logging_config)
 
     # blueprints
-    import api.recipe
-    app.register_blueprint(api.recipe.bp_recipe)
+    import nanodata.api.recipe
+    app.register_blueprint(nanodata.api.recipe.bp_recipe)
 
     return app
