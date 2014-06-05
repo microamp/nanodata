@@ -15,6 +15,7 @@ def docs(start, end, types=(TYPE_INVOICE, TYPE_PAYMENT,)):
                            "$lt": _dt(end)}}
 
 
-def customers(start, end):
-    return {"start_date": {"$gte": _dt(start),
+def customers(parent_id, start, end):
+    return {"parent.$id": parent_id,
+            "start_date": {"$gte": _dt(start),
                            "$lt": _dt(end)}}

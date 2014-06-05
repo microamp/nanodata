@@ -33,9 +33,13 @@ def cook():
     # read from source
     with db.DatabaseHelper(config.DB_SOURCE["hosts"],
                            config.DB_SOURCE["name"]) as db_source:
+        brand = db_source.read_one(COLLECTION_CUSTOMER,
+                                   query={"name": config.BRAND_NAME})
         start, end = date_range()
         docs = db_source.read(COLLECTION_CUSTOMER,
-                              query=q.customers(start, end))
+                              query=q.customers(brand["_id"],
+                                                start,
+                                                end))
         logger.debug("Documents from {start} to {end} (exclusive): "
                      "{count}".format(start=start,
                                       end=end,
